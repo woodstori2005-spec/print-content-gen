@@ -17,9 +17,11 @@ import anthropic
 # Ensure Unicode output works on Windows terminals
 sys.stdout.reconfigure(encoding="utf-8")
 
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+_env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+load_dotenv(dotenv_path=_env_path, override=True)
 
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+_api_key = os.environ.get("ANTHROPIC_API_KEY") or __import__("dotenv").dotenv_values(_env_path).get("ANTHROPIC_API_KEY")
+client = anthropic.Anthropic(api_key=_api_key)
 
 DIVIDER = "─" * 50
 
